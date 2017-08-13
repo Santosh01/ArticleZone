@@ -1,0 +1,64 @@
+title {
+	display: none;
+}
+
+.spancer {
+	margin-top: 40px;
+}
+
+.clickable {
+	cursor: pointer;
+}
+
+footer {
+	background-color: #555;
+	color: white;
+	padding: 15px;
+}
+
+.modal-header, h4, .close {
+	background-color: olive;
+	color: white !important;
+	text-align: center;
+	font-size: 30px;
+}
+
+.modal-footer {
+	background-color: #f9f9f9;
+}
+
+.form-group.required .control-label:BEFORE {
+	content: "*";
+	color: red;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+	position: relative;
+	min-height: 100%;
+}
+
+body {
+	/* Margin bottom by footer height */
+	margin-bottom: 60px;
+}
+
+.footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	/* Set the fixed height of the footer here */
+	height: 60px;
+	background-color: graytext;
+}
+
+.table {
+	table-layout: fixed;
+}
+
+.tds{
+	word-wrap: break-word;
+	min-width: 160px;
+	max-width: 160px;
+}

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="css/myCSS.css" />
+<title>ArticleZone</title>
+<link rel="icon" href="images/article2.png" type="image/x-icon">
+
+</head>
+<body>
+	<div class="container-fluid" data-ng-app="MyApp"
+		data-ng-controller="ArticleHttpController as $ctrl"
+		data-ng-init="getCategoryPagination()">
+		<nav class="navbar navbar-inverse">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapse"
+						data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+						aria-expanded="false">
+						<span class="sr-only">Toggle navigation</span> <span
+							class="icon-bar"></span> <span class="icon-bar"></span> <span
+							class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#">ArticleZone</a>
+				</div>
+
+				<!-- Collect the nav links, forms, and other content for toggling -->
+				<div class="collapse navbar-collapse"
+					id="bs-example-navbar-collapse-1">
+					<form class="navbar-form pull-right" role="search">
+						<div class="form-group pull-left">
+							<input type="search" id="inputArticle" class="form-control"
+								placeholder="Search by Category" data-ng-model="paginationInput">
+						</div>
+						<div class="form-group pull-right">
+							<button type="submit" class="btn btn-success"
+								data-ng-click="getCategoryPagination()">
+								<i class="glyphicon glyphicon-search"></i>
+							</button>
+						</div>
+					</form>
+					<ul class="nav navbar-nav navbar-left">
+						<li class="dropdown"><a href="#" class="dropdown-toggle"
+							data-toggle="dropdown" role="button" aria-haspopup="true"
+							aria-expanded="false">Tasks<span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="#">Action</a></li>
+								<li><a href="#">Another action</a></li>
+								<li><a href="#">Something else here</a></li>
+								<li role="separator" class="divider"></li>
+								<li><a href="#">Separated link</a></li>
+							</ul></li>
+					</ul>
+				</div>
+			</div>
+			<!-- /.navbar-collapse -->
+		</nav>
+
+		<div class="panel panel-primary">
+			<div class="panel-heading">Article Search Engine</div>
+			<div class="panel-body">
+				<div class="container pull-right">
+					<div class="form-group has-success has-feedback pull-right">
+						<ul class="list-group alert-warning">
+							<li class="list-group-item list-group-item-success">Total
+								articles per page: <span class="badge">{{(paginationData.content
+									| filter:filterInput).length}}</span>
+							</li>
+							<li class="list-group-item list-group-item-warning">Total
+								articles found: <span class="badge">{{(paginationData.totalElements)}}</span>
+							</li>
+						</ul>
+						<input type="text" id="filterArticle" class="form-control"
+							placeholder="Filter your records.." data-ng-model="filterInput">
+					</div>
+				</div>
+
+				<table class="table table-striped table-hover table-bordered">
+					<tr class="success">
+						<th>ID</th>
+						<th>Title</th>
+						<th>Category</th>
+						<th>Description</th>
+						<th>Link</th>
+						<th></th>
+						<th></th>
+					</tr>
+					<tr
+						data-ng-repeat="p in paginationData.content | filter:filterInput">
+						<td class="tds">{{p.articleId}}</td>
+						<td>{{p.title}}</td>
+						<td>{{p.category}}</td>
+						<td class="tds">{{p.description}}</td>
+						<td class="tds"><a id="link-1" data-ng-href="{{p.link}}">{{p.link}}</a></td>
+						<td>
+							<button type="button" class="btn btn-default btn-sm"
+								data-ng-click="setValueOnUpdateModal(p.articleId)"
+								data-toggle="modal" data-target="#updateArticleModal">
+								<span class="glyphicon glyphicon-pencil success"></span> update
+							</button>
+							<div class="form-group has-success has-feedback">
+								<div id="updateArticleModal" class="modal fade" role="dialog">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-header">
+												<button type="button" class="close" data-dismiss="modal">&times;</button>
+												<h4 class="modal-title">Update Article Details</h4>
+											</div>
+											<div class="modal-body">
+												<div class="panel panel-primary">
+													<div class="panel-body">
+														<form role="form" id="articleModalForm">
+															<div class="form-group required has-success has-feedback">
+																<label for="title" class="control-label">Article
+																	ID:</label> <input type="text" class="form-control"
+																	id="articleId" required="required"
+																	data-ng-model="$ctrl.articleIdUpdate"
+																	disabled="disabled">
+															</div>
+															<div class="form-group required has-success has-feedback">
+																<label for="title" class="control-label">Title:</label>
+																<input type="text" class="form-control" id="title"
+																	required="required" data-ng-model="$ctrl.titleUpdate">
+															</div>
+															<div class="form-group required has-success has-feedback">
+																<label for="category" class="control-label">Category:</label>
+																<select class="form-control" id="category"
+																	data-ng-model="$ctrl.categoryUpdate"
+																	required="required"
+																	data-ng-options="categories as categories.name for categories in categoryDropdownOptions">
+																	<option value="">---Select Category---</option>
+																</select>
+															</div>
+															<div class="form-group required has-success has-feedback">
+																<label for="link" class="control-label">Link:</label> <input
+																	type="text" class="form-control" id="link"
+																	data-ng-model="$ctrl.linkUpdate" required="required">
+															</div>
+															<div class="form-group required has-success has-feedback">
+																<label for="description" class="control-label">Description:</label>
+																<textarea class="form-control" rows="5" id="description"
+																	maxlength="200" data-ng-model="$ctrl.descriptionUpdate"
+																	required="required"></textarea>
+															</div>
+														</form>
+													</div>
+												</div>
+											</div>
+											<div class="modal-footer">
+												<div class="form-group">
+													<button type="button" class="btn btn-warning btn-sm"
+														data-dismiss="modal" data-ng-click="$ctrl.updateArticle()">
+														<span class="glyphicon glyphicon-plus-sign"></span> Update
+													</button>
+													<button type="button" class="btn btn-default"
+														data-dismiss="modal">Cancel</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div> <!-- Modal group finishes here  -->
+						</td>
+						<td>
+							<button type="button" class="btn btn-default btn-sm"
+								data-ng-click="deleteArticle(p.articleId)">
+								<span class="glyphicon glyphicon-trash alert-danger"></span>
+								Trash
+							</button>
+						</td>
+					</tr>
+				</table>
+
+				<div class="container pull-left">
+					<ul class="pagination ">
+						<li data-ng-show="pagesList.length!=0"
+							data-ng-class="{active:pageCount==$index}" class="clickable"
+							data-ng-repeat="p in pagesList track by $index"><a
+							data-ng-click="navigateToPageIndex($index)"> {{$index+1}} </a></li>
+						<li
+							data-ng-if="pagesList=='undefined' || pagesList=='null' || pagesList.length==0">
+							<span style="color: red;">No Records Found.</span>
+						</li>
+					</ul>
+				</div>
+				<div class="form-group has-success has-feedback pull-right">
+					<button type="button" class="btn btn-warning btn-sm"
+						data-toggle="modal" data-target="#addArticleModal">
+						<span class="glyphicon glyphicon-plus-sign"
+							data-ng-click="_clearCreateDataModal()"></span> Add
+					</button>
+				</div>
+				<!-- Add Article Modal starts from here -->
+				<div class="form-group has-success has-feedback">
+					<div id="addArticleModal" class="modal fade" role="dialog">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">&times;</button>
+									<h4 class="modal-title">Enter Article Details</h4>
+								</div>
+								<div class="modal-body">
+									<div class="panel panel-primary">
+										<div class="panel-body">
+											<form role="form" id="articleModalForm">
+												<div class="form-group required has-success has-feedback">
+													<label for="title" class="control-label">Title:</label> <input
+														type="text" class="form-control" id="title"
+														data-ng-model="titles" placeholder="Enter article name"
+														required="required">
+												</div>
+												<div class="form-group required has-success has-feedback">
+													<label for="category" class="control-label">Category:</label>
+													<select class="form-control" id="category"
+														data-ng-model="category" required="required"
+														data-ng-options="category as category.name for category in categoryDropdownOptions">
+														<option value="">---Select Category---</option>
+													</select>
+												</div>
+												<div class="form-group required has-success has-feedback">
+													<label for="link" class="control-label">Link:</label> <input
+														type="text" class="form-control" id="link"
+														data-ng-model="link" placeholder="Enter article link"
+														required="required">
+												</div>
+												<div class="form-group required has-success has-feedback">
+													<label for="description" class="control-label">Description:</label>
+													<textarea class="form-control" rows="5" id="description"
+														maxlength="200" data-ng-model="description"
+														placeholder="Enter few lines about the article"
+														required="required"></textarea>
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>
+								<div class="modal-footer">
+									<div class="form-group">
+										<button type="button" value="submit"
+											class="btn btn-warning btn-sm" data-dismiss="modal"
+											data-ng-click="createArticle()">
+											<span class="glyphicon glyphicon-plus-sign"></span> Save
+										</button>
+										<button type="button" class="btn btn-default"
+											data-dismiss="modal">Cancel</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--Add article Modal group finishes here  -->
+			</div>
+		</div>
+		<footer class="footer"> </footer>
+	</div>
+	<script type="text/javascript" src="js/angular.min.js"></script>
+	<script type="text/javascript" src="js/angular-ui-router.min.js"></script>
+	<script type="text/javascript" src="controller/ArticleZoneController.js"></script>
+	<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">
+	</script>
+</body>
+</html>
